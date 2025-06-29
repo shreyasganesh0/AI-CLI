@@ -2,13 +2,18 @@ from pathlib import Path
 
 def get_files_info(working_directory, directory=None):
 
-    parent = Path(working_directory).resolve()
+    try:
 
-    child = Path()
-    if directory[0] != '/':
-        child = Path(working_directory + '/' + directory).resolve()
-    else:
-        child = Path(working_directory + '/' + directory).resolve()
+        parent = Path(working_directory).resolve()
+
+        child = Path()
+        if directory[0] != '/':
+            child = Path(working_directory + '/' + file_path).resolve()
+        else:
+            child = Path('/' + file_path).resolve()
+    except Exception as e:
+
+        return f'Error resolving path: {e}'
 
     try:
 
@@ -28,3 +33,4 @@ def get_files_info(working_directory, directory=None):
         ret_str += f'- {item.name}: file_size={size} bytes, is_dir={is_dir}\n'
 
     return ret_str
+
