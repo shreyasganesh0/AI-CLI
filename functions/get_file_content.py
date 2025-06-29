@@ -15,6 +15,7 @@ def get_file_content(working_directory, file_path):
 
         return f'Error resolving path: {e}'
 
+
     try:
 
         child.relative_to(parent)
