@@ -1,4 +1,4 @@
-from functions.write_file import write_file 
+from functions.run_python_file import run_python_file 
 
 # ans = get_files_info("calculator", ".")
 # print(ans)
@@ -24,11 +24,23 @@ from functions.write_file import write_file
 # ans = get_file_content("calculator", "/bin/cat")
 # print(ans)
 
-ans = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
+# ans = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
+# print(ans)
+#
+# ans = write_file("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet")
+# print(ans)
+#
+# ans = write_file("calculator", "/tmp/temp.txt", "this should not be allowed")
+# print(ans)
+
+ans = run_python_file("calculator", "main.py")
 print(ans)
 
-ans = write_file("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet")
+ans = run_python_file("calculator", "tests.py")
 print(ans)
 
-ans = write_file("calculator", "/tmp/temp.txt", "this should not be allowed")
+ans = run_python_file("calculator", "../main.py")
+print(ans)
+
+ans = run_python_file("calculator", "nonexistent.py")
 print(ans)
