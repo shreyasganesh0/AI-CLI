@@ -4,11 +4,13 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from functions.call_function import call_function
+
 from functions.schemas import (
     schema_get_files_info,
     schema_get_file_content,  
     schema_run_python_file,
-    schema_write_file
+    schema_write_file,
 )
 
 def prompt():
@@ -70,14 +72,20 @@ def prompt():
     print(f"{resp.text}\n")
 
     for func in resp.function_calls:
-        print(f"Calling function: {func.name}({func.args})")
 
+        function_call_result = call_function(func, v_flag);
+        
+        contents = function_call_result.parts[0].function_response.response
+        if not contents:
 
-    if v_flag == True:
-        print(f"User prompt: {prompt}\n" 
-              f"Prompt tokens: {resp.usage_metadata.prompt_token_count}\n" 
-              f"Response tokens:{resp.usage_metadata.candidates_token_count}\n")
-
+            raise Exception(f"No response recieved for this function:\n{contents}")
+        else:
+            if v_flag == True:
+                print(f"-> {function_call_result.parts[0].function_response.response}\n")
+                print(f"User prompt: {prompt}\n" 
+                      f"Prompt tokens: {resp.usage_metadata.prompt_token_count}\n" 
+                      f"Response tokens:{resp.usage_metadata.candidates_token_count}\n")
+            
 
 if __name__ == "__main__":
 

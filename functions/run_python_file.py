@@ -1,8 +1,9 @@
 import subprocess
 from pathlib import Path
 
-def run_python_file(working_directory, file_path):
+def run_python_file(working_directory, file_path, **kwargs):
 
+    print(f"This is {working_directory}") 
     if not file_path.endswith(".py"):
 
         return f'Error: "{file_path}" is not a Python file.'
@@ -10,6 +11,7 @@ def run_python_file(working_directory, file_path):
     try:
 
         parent = Path(working_directory).resolve()
+
 
         child = Path()
         if file_path[0] != '/':
