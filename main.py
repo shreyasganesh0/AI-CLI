@@ -61,31 +61,41 @@ def prompt():
         ]
     ) # tell the LLM what functions it can use
 
-    resp = client.models.generate_content(model = model,
-                                          contents = messages,
-                                          config = types.GenerateContentConfig(
-                                            tools=[available_functions], 
-                                            system_instruction=system_prompt
+    for i in range(20):
+
+        resp = client.models.generate_content(model = model,
+                                              contents = messages,
+                                              config = types.GenerateContentConfig(
+                                                tools=[available_functions], 
+                                                system_instruction=system_prompt
+                                                )
                                             )
-                                        )
+        if not resp.function_calls:
 
-    print(f"{resp.text}\n")
+            print(f"Final Result: {resp.text}\n")
+            break
 
-    for func in resp.function_calls:
+        for candidate in resp.candidates:
 
-        function_call_result = call_function(func, v_flag);
-        
-        contents = function_call_result.parts[0].function_response.response
-        if not contents:
+            messages.append(candidate.content)
 
-            raise Exception(f"No response recieved for this function:\n{contents}")
-        else:
-            if v_flag == True:
-                print(f"-> {function_call_result.parts[0].function_response.response}\n")
-                print(f"User prompt: {prompt}\n" 
-                      f"Prompt tokens: {resp.usage_metadata.prompt_token_count}\n" 
-                      f"Response tokens:{resp.usage_metadata.candidates_token_count}\n")
+
+        for func in resp.function_calls:
+
+            function_call_result = call_function(func, v_flag);
             
+            messages.append(function_call_result)
+            contents = function_call_result.parts[0].function_response.response
+            if not contents:
+
+                raise Exception(f"No response recieved for this function:\n{contents}")
+            else:
+                if v_flag == True:
+                    print(f"-> {function_call_result.parts[0].function_response.response}\n")
+                    print(f"User prompt: {prompt}\n" 
+                          f"Prompt tokens: {resp.usage_metadata.prompt_token_count}\n" 
+                          f"Response tokens:{resp.usage_metadata.candidates_token_count}\n")
+                
 
 if __name__ == "__main__":
 

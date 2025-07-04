@@ -51,7 +51,7 @@ def run_python_file(working_directory, file_path, **kwargs):
         for line in result.stdout.splitlines():
             res += (f"{line}")
 
-        res = "STDERR:\n"
+        res += "STDERR:\n"
         for line in result.stderr.splitlines():
             res += (f"{line}")
         return res
